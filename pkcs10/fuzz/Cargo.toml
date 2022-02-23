@@ -1,0 +1,23 @@
+[package]
+name = "pkcs10-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2021"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+
+[dependencies.pkcs10]
+path = ".."
+
+[workspace]
+members = ["."]
+
+[[bin]]
+name = "certreq"
+path = "src/CertReq/fuzz.rs"
+test = false
+doc = false

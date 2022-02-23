@@ -68,3 +68,21 @@ jobs:
           override: true
       - uses: RustCrypto/actions/cargo-hack-install@master
       - run: cargo hack test --feature-powerset
+
+  fuzz:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust:
+          - stable
+    steps:
+      - uses: actions/checkout@v2
+      - uses: RustCrypto/actions/cargo-cache@master
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust }}
+          override: true
+      - uses: RustCrypto/actions/cargo-hack-install@master
+      - run: cargo install cargo-fuzz
+      - run: cargo fuzz run certreq -- -max_total_time=60 -seed_inputs="fuzz/src/CertReq/seed_input"
